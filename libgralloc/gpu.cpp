@@ -351,8 +351,10 @@ int gpu_context_t::alloc_impl(int w, int h, int format, int usage,
     size = getBufferSizeAndDimensions(w, h, grallocFormat, usage, alignedw,
                    alignedh);
 
-    if ((unsigned int)size <= 0)
+    if ((unsigned int)size <= 0) {
+        ALOGE("V521DBG alloc_impl: size<=0 w=%d h=%d fmt=%d usage=0x%x", w, h, grallocFormat, usage);
         return -EINVAL;
+    }
     size = (bufferSize >= size)? bufferSize : size;
 
     int err = 0;
@@ -364,6 +366,8 @@ int gpu_context_t::alloc_impl(int w, int h, int format, int usage,
     }
 
     if (err < 0) {
+        ALOGE("V521DBG alloc_impl: %s failed err=%d w=%d h=%d fmt=%d usage=0x%x size=%u",
+              useFbMem ? "alloc_framebuffer" : "alloc_buffer", err, w, h, grallocFormat, usage, size);
         return err;
     }
 
